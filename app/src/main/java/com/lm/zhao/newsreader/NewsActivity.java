@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -22,8 +25,11 @@ import zlm.SQLite.UserContentProvider;
 import zlm.SQLite.UserMata;
 import zlm.Thread.JsonThread;
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
+
+    private NewsItemAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,16 +38,33 @@ public class NewsActivity extends AppCompatActivity {
 
         JsonThread thread = new JsonThread(this);
         thread.start();
-        listView= (ListView) findViewById(R.id.listView_News);
-        Uri uri=Uri.parse("content://com.zlm.news.ContentProvider/stories");
-        Cursor cursor=getContentResolver().query(uri,null,null,null,null);
-        NewsItemAdapter adapter=new NewsItemAdapter(this,cursor);
+        listView = (ListView) findViewById(R.id.listView_News);
+//        Uri uri = Uri.parse("content://com.zlm.news.ContentProvider/stories");
+//        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        adapter = new NewsItemAdapter(this, null);
         listView.setAdapter(adapter);
 
-        
+        getSupportLoaderManager().initLoader(0, null, this);
     }
 
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri uri = Uri.parse("content://com.zlm.news.ContentProvider/stories");
+        return new CursorLoader(this, uri, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.getCount() > 0) {
+            adapter.swapCursor(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }
 
 
