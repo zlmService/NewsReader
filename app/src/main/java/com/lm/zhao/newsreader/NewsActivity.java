@@ -37,6 +37,8 @@ public class NewsActivity extends AppCompatActivity {
         Cursor cursor=getContentResolver().query(uri,null,null,null,null);
         NewsItemAdapter adapter=new NewsItemAdapter(this,cursor);
         listView.setAdapter(adapter);
+
+        
     }
 
 
