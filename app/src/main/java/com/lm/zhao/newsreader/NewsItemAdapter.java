@@ -29,7 +29,7 @@ public class NewsItemAdapter extends CursorAdapter {
     }
 
     public NewsItemAdapter(Context context, Cursor c) {
-        super(context, c, FLAG_AUTO_REQUERY);
+        super(context, c, true);
 
     }
 

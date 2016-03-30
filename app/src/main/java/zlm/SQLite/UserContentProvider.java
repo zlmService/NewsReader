@@ -99,7 +99,8 @@ public class UserContentProvider extends ContentProvider {
             case STORIES_MUTIPLE_CODE:
                 SQLiteDatabase db = userHelper.getWritableDatabase();
                 int delete = db.delete(UserMata.Stories.TABLE_NAME, selection, selectionArgs);
-                return  delete;
+
+                return delete;
         }
         return 0;
     }
